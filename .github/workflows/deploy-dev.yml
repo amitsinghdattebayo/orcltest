@@ -1,0 +1,28 @@
+name: Deploy to Dev
+
+on:
+  push:
+    branches:
+      - dev # Trigger this workflow when pushing to the 'dev' branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Deploy to Dev
+        run: ./deploy-scripts/deploy-to-dev.sh
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_DEV }}
+          API_KEY: ${{ secrets.API_KEY_DEV }}
